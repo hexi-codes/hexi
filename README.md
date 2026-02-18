@@ -1,5 +1,7 @@
 # Hexi v0.1.0
 
+![Hexi Saturn Hexagon](assets/images/hexi-saturn-hexagon-1024x1024.png)
+
 Hexi is a minimal, contract-driven (hexagonal) coding-agent runtime and CLI.
 It runs exactly one agent step per invocation against a local git repository.
 
