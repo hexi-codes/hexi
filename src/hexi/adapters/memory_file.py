@@ -1,0 +1,224 @@
+from __future__ import annotations
+
+import json
+import os
+from pathlib import Path
+from typing import Any
+
+try:
+    import tomllib  # py310+
+except ModuleNotFoundError:  # pragma: no cover
+    import tomli as tomllib
+
+from hexi.core.domain import Event, ModelConfig, Policy
+
+DEFAULT_CONFIG = """[model]
+provider = "openai_compat"
+model = "gpt-4o-mini"
+
+[providers.openrouter_http]
+base_url = "https://openrouter.ai/api/v1"
+api_style = "openai"
+
+[providers.openrouter_sdk]
+base_url = "https://openrouter.ai/api/v1"
+
+[providers.openai_compat]
+base_url = "https://api.openai.com/v1"
+
+[providers.anthropic_compat]
+base_url = "https://api.anthropic.com"
+
+[policy]
+allow_commands = ["git status", "git diff", "pytest", "python -m pytest"]
+max_diff_chars = 4000
+max_file_read_chars = 4000
+"""
+
+EMPTY_LOCAL_CONFIG = """# Local, machine-specific overrides for Hexi.
+# Keep secrets here if you do not want to export env vars.
+# This file should not be committed.
+
+[model]
+# provider = "openai_compat"
+# model = "gpt-4o-mini"
+
+[providers.openrouter_http]
+# api_style = "openai"
+# base_url = "https://openrouter.ai/api/v1"
+
+[secrets]
+# openrouter_api_key = "..."
+# openai_api_key = "..."
+# anthropic_api_key = "..."
+"""
+
+
+def _merge_dicts(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
+    out = dict(base)
+    for key, value in override.items():
+        if isinstance(value, dict) and isinstance(out.get(key), dict):
+            out[key] = _merge_dicts(out[key], value)
+        else:
+            out[key] = value
+    return out
+
+
+class FileMemory:
+    def __init__(self, repo_root: Path) -> None:
+        self.repo_root = repo_root
+        self.hexi_dir = repo_root / ".hexi"
+        self.config_path = self.hexi_dir / "config.toml"
+        self.local_config_path = self.hexi_dir / "local.toml"
+        self.runlog_path = self.hexi_dir / "runlog.jsonl"
+
+    def ensure_initialized(self) -> None:
+        self.hexi_dir.mkdir(parents=True, exist_ok=True)
+        if not self.config_path.exists():
+            self.config_path.write_text(DEFAULT_CONFIG, encoding="utf-8")
+        if not self.local_config_path.exists():
+            self.local_config_path.write_text(EMPTY_LOCAL_CONFIG, encoding="utf-8")
+        if not self.runlog_path.exists():
+            self.runlog_path.write_text("", encoding="utf-8")
+
+    def load_model_config(self) -> ModelConfig:
+        cfg = self._load_merged_toml()
+        model = cfg.get("model", {})
+        provider = str(model.get("provider", "openai_compat"))
+        provider_cfg = cfg.get("providers", {}).get(provider, {})
+        if not isinstance(provider_cfg, dict):
+            provider_cfg = {}
+
+        base_url = provider_cfg.get("base_url", model.get("base_url"))
+        api_style = provider_cfg.get("api_style", model.get("openrouter_api_style"))
+
+        return ModelConfig(
+            provider=provider,
+            model=str(model.get("model", "gpt-4o-mini")),
+            base_url=str(base_url) if isinstance(base_url, str) else None,
+            api_style=str(api_style) if isinstance(api_style, str) else None,
+        )
+
+    def load_policy(self) -> Policy:
+        cfg = self._load_merged_toml()
+        pol = cfg.get("policy", {})
+        allow_commands = pol.get("allow_commands", ["git status", "git diff", "pytest", "python -m pytest"])
+        if not isinstance(allow_commands, list):
+            raise ValueError("policy.allow_commands must be an array")
+        return Policy(
+            allow_commands=[str(x) for x in allow_commands],
+            max_diff_chars=int(pol.get("max_diff_chars", 4000)),
+            max_file_read_chars=int(pol.get("max_file_read_chars", 4000)),
+        )
+
+    def resolve_api_key(self, provider: str) -> tuple[str | None, str | None]:
+        env_name = self._provider_env_var(provider)
+        if env_name is None:
+            return None, None
+
+        env_value = os.getenv(env_name, "").strip()
+        if env_value:
+            return env_value, "env"
+
+        local = self._load_local_toml()
+        secrets = local.get("secrets", {}) if isinstance(local, dict) else {}
+        if not isinstance(secrets, dict):
+            secrets = {}
+
+        secret_key_name = self._provider_local_secret_key(provider)
+        value = str(secrets.get(secret_key_name, "")).strip()
+        if value:
+            return value, "local"
+        return None, None
+
+    def apply_api_key_to_env(self, provider: str) -> str | None:
+        env_name = self._provider_env_var(provider)
+        if env_name is None:
+            return None
+        key, source = self.resolve_api_key(provider)
+        if key and not os.getenv(env_name):
+            os.environ[env_name] = key
+        return source
+
+    def write_local_onboarding(
+        self,
+        provider: str,
+        model: str,
+        api_style: str | None,
+        api_key: str | None,
+    ) -> None:
+        self.ensure_initialized()
+        lines: list[str] = [
+            "# Generated by `hexi onboard`.",
+            "# Local overrides and secrets.",
+            "",
+            "[model]",
+            f'provider = "{provider}"',
+            f'model = "{model}"',
+            "",
+        ]
+
+        if provider == "openrouter_http":
+            lines.extend([
+                "[providers.openrouter_http]",
+                f'api_style = "{api_style or "openai"}"',
+                "",
+            ])
+
+        if api_key and api_key.strip():
+            secret_name = self._provider_local_secret_key(provider)
+            lines.extend([
+                "[secrets]",
+                f'{secret_name} = "{api_key.strip()}"',
+                "",
+            ])
+
+        self.local_config_path.write_text("\n".join(lines), encoding="utf-8")
+
+    def append_runlog(self, event: Event) -> None:
+        data = {
+            "type": event.type,
+            "one_line_summary": event.one_line_summary,
+            "blocking": event.blocking,
+            "payload": event.payload,
+        }
+        with self.runlog_path.open("a", encoding="utf-8") as f:
+            f.write(json.dumps(data, ensure_ascii=True) + "\n")
+
+    def _load_merged_toml(self) -> dict[str, Any]:
+        base = self._load_toml(self.config_path)
+        local = self._load_local_toml()
+        return _merge_dicts(base, local)
+
+    def _load_local_toml(self) -> dict[str, Any]:
+        if not self.local_config_path.exists():
+            return {}
+        return self._load_toml(self.local_config_path)
+
+    def _load_toml(self, path: Path) -> dict[str, Any]:
+        if not path.exists():
+            raise FileNotFoundError(f"missing config: {path}")
+        data = tomllib.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(data, dict):
+            raise ValueError(f"invalid TOML object: {path}")
+        return data
+
+    @staticmethod
+    def _provider_env_var(provider: str) -> str | None:
+        mapping = {
+            "openrouter_http": "OPENROUTER_API_KEY",
+            "openrouter_sdk": "OPENROUTER_API_KEY",
+            "openai_compat": "OPENAI_API_KEY",
+            "anthropic_compat": "ANTHROPIC_API_KEY",
+        }
+        return mapping.get(provider)
+
+    @staticmethod
+    def _provider_local_secret_key(provider: str) -> str:
+        mapping = {
+            "openrouter_http": "openrouter_api_key",
+            "openrouter_sdk": "openrouter_api_key",
+            "openai_compat": "openai_api_key",
+            "anthropic_compat": "anthropic_api_key",
+        }
+        return mapping.get(provider, "openrouter_api_key")

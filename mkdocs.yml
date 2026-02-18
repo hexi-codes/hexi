@@ -1,0 +1,67 @@
+site_name: Hexi
+site_description: Hexi minimal contract-driven coding-agent runtime
+site_url: https://hexi.readthedocs.io
+repo_url: https://github.com/your-org/hexi
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - content.tabs.link
+    - search.suggest
+    - search.highlight
+
+nav:
+  - Home:
+    - Overview: index.md
+    - Vision: preface/vision.md
+  - Concepts:
+    - Mental Model: concepts/mental-model.md
+    - Events: concepts/events.md
+    - Action Plans: concepts/action-plans.md
+    - Safety Model: concepts/safety.md
+    - Provider Strategy: concepts/providers.md
+  - Tutorials:
+    - Quickstart: tutorials/quickstart.md
+    - First Real Run: tutorials/first-run.md
+    - Embedded Python Usage: tutorials/embedded-usage.md
+    - Team Bootstrap: tutorials/team-bootstrap.md
+  - How-To:
+    - Configure Providers: how-to/configure-providers.md
+    - Write Safe Policies: how-to/write-policies.md
+    - Troubleshoot Failing Runs: how-to/troubleshoot-runs.md
+    - Add A Model Adapter: how-to/add-model-adapter.md
+    - Contribute Changes: how-to/contribute.md
+  - Reference:
+    - CLI: reference/cli.md
+    - Configuration: reference/configuration.md
+    - Templates: reference/templates.md
+    - Python API: reference/python-api.md
+    - Event Schema: reference/event-schema.md
+    - ActionPlan Schema: reference/actionplan-schema.md
+    - Architecture: reference/architecture.md
+  - Examples:
+    - Overview: examples/index.md
+    - Templates Walkthrough: examples/templates-walkthrough.md
+    - Todo Refiner: examples/todo-refiner.md
+    - Embedded Step: examples/embedded-step.md
+    - Policy Loop: examples/policy-loop.md
+  - Internals:
+    - RunStepService Walkthrough: internals/run-step-service.md
+    - Storage Layering: internals/storage-layering.md
+    - Testing Strategy: internals/testing-strategy.md
+    - v0.0.1 Scope Decisions: internals/v001-decisions.md
+  - Appendix:
+    - Provenance: appendix/provenance.md
+    - FAQ: appendix/faq.md
+    - Troubleshooting Matrix: appendix/troubleshooting-matrix.md
+    - Glossary: appendix/glossary.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true

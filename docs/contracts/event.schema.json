@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "one_line_summary", "blocking", "payload"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["progress", "question", "review", "artifact", "error", "done"]
+    },
+    "one_line_summary": { "type": "string", "minLength": 1, "maxLength": 300 },
+    "blocking": { "type": "boolean" },
+    "payload": { "type": "object", "additionalProperties": true }
+  }
+}
