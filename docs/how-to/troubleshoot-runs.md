@@ -17,6 +17,7 @@ tail -n 100 .hexi/runlog.jsonl
 ```
 
 Look for:
+
 - parse errors,
 - disallowed commands,
 - file/path errors.

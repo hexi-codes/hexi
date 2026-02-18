@@ -1,6 +1,7 @@
 # ActionPlan Schema
 
 Canonical JSON schema is stored at:
+
 - `docs/contracts/action_plan.schema.json`
 
 ## Top-level

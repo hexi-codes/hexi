@@ -272,6 +272,29 @@ body {
   border-radius: var(--radius-md);
 }
 
+.prose ul,
+.prose ol {
+  margin: var(--space-3) 0 var(--space-4);
+  padding-left: 1.4rem;
+}
+
+.prose ul {
+  list-style: disc;
+}
+
+.prose ol {
+  list-style: decimal;
+}
+
+.prose li {
+  margin: 0.34rem 0;
+  display: list-item;
+}
+
+.prose li > p {
+  margin: 0.18rem 0;
+}
+
 .prose code,
 .prose kbd,
 .prose samp,
@@ -345,6 +368,15 @@ body {
 .toc ul {
   margin: 0;
   padding-left: 1rem;
+}
+
+.toc li {
+  margin: 0.3rem 0;
+}
+
+.toc li[data-depth="3"] {
+  margin-left: 0.6rem;
+  opacity: 0.92;
 }
 
 .toc a {
@@ -505,3 +537,60 @@ input:focus-visible,
     scroll-behavior: auto !important;
   }
 }
+
+/* Pygments syntax highlighting */
+.prose .codehilite { margin: var(--space-4) 0; }
+.prose .codehilite pre { margin: 0; }
+.prose .codehilite .hll { background-color: rgb(255 255 255 / 8%); }
+.prose .codehilite .c,
+.prose .codehilite .cm,
+.prose .codehilite .c1,
+.prose .codehilite .cs { color: #7f8aa1; font-style: italic; }
+.prose .codehilite .k,
+.prose .codehilite .kc,
+.prose .codehilite .kd,
+.prose .codehilite .kn,
+.prose .codehilite .kp,
+.prose .codehilite .kr,
+.prose .codehilite .kt { color: #ff8ea1; }
+.prose .codehilite .n,
+.prose .codehilite .nb,
+.prose .codehilite .nf,
+.prose .codehilite .nn,
+.prose .codehilite .nt { color: #d7deef; }
+.prose .codehilite .s,
+.prose .codehilite .sa,
+.prose .codehilite .sb,
+.prose .codehilite .sc,
+.prose .codehilite .sd,
+.prose .codehilite .s1,
+.prose .codehilite .s2,
+.prose .codehilite .se,
+.prose .codehilite .sh,
+.prose .codehilite .si,
+.prose .codehilite .sx { color: #b7e59a; }
+.prose .codehilite .m,
+.prose .codehilite .mi,
+.prose .codehilite .mf,
+.prose .codehilite .il { color: #f2cc8f; }
+.prose .codehilite .o,
+.prose .codehilite .ow { color: #9dd6ff; }
+.prose .codehilite .p { color: #c7d0e6; }
+.prose .codehilite .err { color: #ff6b6b; border-bottom: 1px dotted #ff6b6b; }
+
+:root[data-theme="light"] .prose .codehilite .c,
+:root[data-theme="light"] .prose .codehilite .cm,
+:root[data-theme="light"] .prose .codehilite .c1,
+:root[data-theme="light"] .prose .codehilite .cs { color: #8b95aa; }
+:root[data-theme="light"] .prose .codehilite .k,
+:root[data-theme="light"] .prose .codehilite .kc,
+:root[data-theme="light"] .prose .codehilite .kd,
+:root[data-theme="light"] .prose .codehilite .kn,
+:root[data-theme="light"] .prose .codehilite .kp,
+:root[data-theme="light"] .prose .codehilite .kr,
+:root[data-theme="light"] .prose .codehilite .kt { color: #ff9db0; }
+:root[data-theme="light"] .prose .codehilite .n,
+:root[data-theme="light"] .prose .codehilite .nb,
+:root[data-theme="light"] .prose .codehilite .nf,
+:root[data-theme="light"] .prose .codehilite .nn,
+:root[data-theme="light"] .prose .codehilite .nt { color: #ecf1ff; }

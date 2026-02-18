@@ -54,11 +54,14 @@ nav:
     - Glossary: appendix/glossary.md
 
 markdown_extensions:
+  - fenced_code
+  - codehilite:
+      guess_lang: false
+      use_pygments: true
   - admonition
   - attr_list
   - md_in_html
-  - toc:
-      permalink: true
+  - toc
 
 plugins:
   - search

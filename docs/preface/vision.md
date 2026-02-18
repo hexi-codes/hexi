@@ -5,6 +5,7 @@ Hexi exists to make coding agents **boring in the best way**: inspectable, bound
 ## The gap Hexi targets
 
 Many agent tools are either:
+
 - too minimal to operationalize, or
 - too heavy to trust quickly.
 
@@ -30,6 +31,7 @@ These constraints are deliberate. They keep refactors cheap and behavior legible
 ## Long-term direction
 
 Hexi can expand in layers without breaking contracts:
+
 - richer policy checks,
 - stronger review artifacts,
 - more model adapters,

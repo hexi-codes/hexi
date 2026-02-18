@@ -30,6 +30,7 @@ Hexi requires model output in a strict JSON action-plan format.
 ## Practical advice
 
 When tuning prompts or models, optimize for:
+
 - fewer actions,
 - deterministic writes,
 - explicit run commands that align with policy allowlists.

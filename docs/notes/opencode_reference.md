@@ -2,6 +2,7 @@
 
 Reference repo inspected: `/Users/gnrfan/code/floss/opencode`
 Commits reviewed (early evolution):
+
 - `4b0ea68d7` (`initial`)
 - `7844cacb2` (`add help`)
 - `e7258e38a` (`initial agent setup`)

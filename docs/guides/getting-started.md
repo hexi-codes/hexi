@@ -34,6 +34,7 @@ hexi onboard
 ```
 
 This writes:
+
 - `.hexi/config.toml` (shared defaults)
 - `.hexi/local.toml` (local overrides + optional local key)
 - `.hexi/runlog.jsonl` (append-only events)

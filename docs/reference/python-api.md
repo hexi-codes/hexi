@@ -3,6 +3,7 @@
 ## Core domain
 
 `hexi.core.domain`:
+
 - `Event`
 - `Thread`
 - `ModelConfig`
@@ -12,6 +13,7 @@
 ## Core ports
 
 `hexi.core.ports`:
+
 - `ModelPort`
 - `WorkspacePort`
 - `ExecPort`

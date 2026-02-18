@@ -15,6 +15,7 @@ model = "gpt-4o-mini"
 ```
 
 Fields:
+
 - `provider`: selected adapter key
 - `model`: provider-specific model id
 

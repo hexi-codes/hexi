@@ -11,6 +11,7 @@ Prints the installed Hexi version.
 ## `hexi init`
 
 Creates repository-scoped state files:
+
 - `.hexi/config.toml`
 - `.hexi/local.toml`
 - `.hexi/runlog.jsonl`
@@ -27,6 +28,7 @@ Works in bootstrap mode outside git repos.
 Scaffolds a project from a built-in template.
 
 Key options:
+
 - `--template`
 - `--name`
 - `--path`
@@ -37,6 +39,7 @@ Key options:
 ## `hexi demo`
 
 Runs a fancy interactive flow:
+
 - random idea mode,
 - model-generated 3-idea mode,
 - custom prompt mode,
@@ -48,6 +51,7 @@ then scaffolds a selected template.
 Runs one agent step.
 
 Exit codes:
+
 - `0`: successful run
 - `1`: run completed with failure state
 - `2`: environment/setup error
@@ -59,10 +63,12 @@ Prints bounded git diff.
 ## `hexi doctor`
 
 Checks:
+
 - repo context
 - active provider/model
 - config + local config paths
 - API key source (`env`, `local`, `none`)
 
 Optional live probe:
+
 - `hexi doctor --probe-model`

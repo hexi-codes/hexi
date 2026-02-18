@@ -56,4 +56,26 @@
       searchInput.focus();
     }
   });
+
+  var tocList = document.getElementById("toc-list");
+  if (tocList) {
+    var headings = Array.prototype.slice.call(document.querySelectorAll(".prose h2[id], .prose h3[id]"));
+    if (headings.length === 0) {
+      var tocCard = document.querySelector(".toc-card");
+      if (tocCard) {
+        tocCard.style.display = "none";
+      }
+    } else {
+      headings.forEach(function (heading) {
+        var li = document.createElement("li");
+        var depth = heading.tagName.toLowerCase() === "h3" ? "3" : "2";
+        li.setAttribute("data-depth", depth);
+        var a = document.createElement("a");
+        a.href = "#" + heading.id;
+        a.textContent = heading.textContent || "";
+        li.appendChild(a);
+        tocList.appendChild(li);
+      });
+    }
+  }
 })();

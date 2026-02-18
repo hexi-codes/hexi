@@ -9,6 +9,7 @@ All templates include built-in Hexi integration from day one.
 Use for package/library work.
 
 Includes:
+
 - `src/` package + unit tests
 - `.hexi/` defaults
 - Make targets for `test`, `hexi-doctor`, `hexi-run`
@@ -18,6 +19,7 @@ Includes:
 Use for API service starts.
 
 Includes:
+
 - FastAPI app with `/health`
 - API tests
 - `.hexi/` defaults + runner targets
@@ -27,6 +29,7 @@ Includes:
 Use for developer CLI tooling.
 
 Includes:
+
 - Typer command app
 - CLI tests
 - `.hexi/` defaults + helper targets
@@ -36,6 +39,7 @@ Includes:
 Use for ETL/report style scripts.
 
 Includes:
+
 - dry-run command
 - data input/output folders
 - test harness
@@ -46,6 +50,7 @@ Includes:
 Use for embedding Hexi runtime directly.
 
 Includes:
+
 - `RunStepService` embedded entrypoint
 - adapter wiring example
 - `.hexi/` defaults and helper targets

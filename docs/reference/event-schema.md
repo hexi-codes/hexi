@@ -1,6 +1,7 @@
 # Event Schema
 
 Canonical JSON schema is stored at:
+
 - `docs/contracts/event.schema.json`
 
 ## Required fields

@@ -51,12 +51,10 @@
     </main>
 
     <aside class="toc" aria-label="Table of contents">
-      {% if page and page.toc %}
       <div class="toc-card">
         <p class="toc-title">On this page</p>
-        {{ page.toc }}
+        <ul id="toc-list"></ul>
       </div>
-      {% endif %}
     </aside>
   </div>
 
