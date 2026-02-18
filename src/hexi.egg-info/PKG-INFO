@@ -108,6 +108,7 @@ Re-run onboarding to update `.hexi/local.toml`.
 - No MCP server and no SQLite in v0.1.0
 - No multi-agent orchestration
 
+
 ## Install
 ```bash
 pip install -e .
@@ -142,6 +143,7 @@ pip install -e ".[dev]"
 - `hexi run "<task>"` : execute one agent step and emit structured events
 - `hexi diff` : show current git diff
 - `hexi doctor` : verbose diagnostics; use `--probe-model` for live “What model are you?” check
+- `hexi plan-check --file plan.json` : validate/troubleshoot ActionPlan JSON directly
 
 ## Documentation (MkDocs + Read the Docs)
 Build docs locally:

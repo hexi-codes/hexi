@@ -50,7 +50,7 @@ hexi onboard
 Re-run onboarding to update `.hexi/local.toml`.
 
 ## What it is
-- Python package name: `hexi`
+- Python package (PyPI distribution): `hexicodes`
 - Core contracts in `hexi.core`
 - Side-effect adapters in `hexi.adapters`
 - One-step execution with structured event logging to `.hexi/runlog.jsonl`
@@ -158,7 +158,7 @@ openrouter_api_key = "..."
 - `ANTHROPIC_API_KEY` for `anthropic_compat`
 
 ## Packaging
-- Distribution name: `hexi`
+- Distribution name: `hexicodes`
 - Console script: `hexi`
 - Optional extras:
   - `openrouter-http`
